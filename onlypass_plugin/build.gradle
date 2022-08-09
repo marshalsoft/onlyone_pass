@@ -50,7 +50,7 @@ afterEvaluate{
             release(MavenPublication){
                 from components.release
                 groupId = "com.github.marshalsoft"
-                artifactId = "onlypass-plugin"
+                artifactId = "onlypass_plugin"
                 version = "1.0"
             }
         }
