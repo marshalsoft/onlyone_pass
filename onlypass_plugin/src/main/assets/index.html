@@ -1,0 +1,188 @@
+<html />
+<head >
+    <title>Onlypass Payment</title>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script src="https://checkout.flutterwave.com/v3.js"></script>
+    <script src="//pay.voguepay.com/js/voguepay.js"></script>
+    <script type="text/javascript" src="https://sdk.monnify.com/plugin/monnify.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+body{
+    width:"100%";
+    height:"100%";
+}
+    td {
+    justify-content: center;
+    display: flex;
+    }
+
+</style>
+</head>
+<body>
+<script >
+    var paymentDetails = {};
+    var call = "";
+function show()
+{
+OnlyPassCall.Show(allObj);
+}
+function loadBtns(o)
+{
+// ref = createUniqueID();
+paymentDetails = JSON.parse(o);
+
+if(paymentDetails.gatewayName == "Flutterwave" && call == "")
+{
+call = paymentDetails.gatewayName;
+payWithflutterwave();
+}else if(paymentDetails.gatewayName == "Paystack" && call == "")
+{
+call = paymentDetails.gatewayName;
+payWithpaystack();
+}
+}
+window.addEventListener("onhashchange", function(){
+      var prevHash = window.location.hash;
+    if(prevHash != ""){
+              console.log(prevHash);
+              var x = document.getElementById(prevHash.replace("#",""));
+              console.log(x.display);
+              if(x.display == "none")
+              {
+              x.display = "flex";
+              }
+           }
+});
+
+function payWithpaystack() {
+const d = {
+    key:`${paymentDetails.publicKey}`,
+    email: `${paymentDetails.email}`,
+    amount:parseInt(paymentDetails.amount)*100,
+    currency:`${paymentDetails.currency}`,
+    ref: `${paymentDetails.refNo}`,
+    callback: function(response) {
+       OnlyPassCall.Show(true,"Payment was successful")
+    },
+    onClose: function() {
+      OnlyPassCall.Show(false,"Payment cancelled")
+    },
+  }
+  var handler = PaystackPop.setup(d);
+  handler.openIframe();
+}
+function payWithflutterwave()
+{
+   FlutterwaveCheckout({
+      public_key: `${paymentDetails.publicKey}`,
+      tx_ref:`${paymentDetails.refNo}`,
+      amount:`${paymentDetails.amount}`,
+      currency:`${paymentDetails.currency}`,
+      country: "NG",
+      payment_options:"card,mobilemoney,ussd,banktransfer,paga,qr,mpesa,account",
+      redirect_url:`api.marshalsoft.pro/payments/#processing`,
+        meta: {},
+        customer: {
+        email:`${paymentDetails.email}`,
+        phone_number:`${paymentDetails.mobile_number}`,
+        name: ``,
+        },
+        callback: function (data) {
+          window.location.href = "?platform=flutter#success";
+        },
+        onclose: function() {
+        // close modal
+         window.location.href = "?platform=flutter#cancelled";
+        }
+    });
+}
+function payWithvoguepay(i){
+      //Initiate voguepay inline payment
+      Voguepay.init({
+        v_merchant_id: 'demo',
+        total: '200',
+        notify_url:'http://api.onethought.ng/v1.0/notification.php',
+        cur: '',
+        merchant_ref: '2006222022093058',
+        memo:'fklf kf fjfkkf',
+        developer_code: '5a61be72ab323',
+        items: [ ],
+        customer: {
+          name: `Ikenna Treepz`,
+          address: '',
+          city: '',
+          state: '',
+          zipcode: '',
+          email: `onyejiaka.samuel@gmail.com`,
+          phone: `07039513207`
+        },
+        closed:function(d){
+         window.location.href = "?platform=voguepay#cancelled";
+        },
+        success:function(transaction_id){
+            window.location.href = "?platform=voguepay#success";
+        },
+        failed:function(d){
+          window.location.href = "?platform=voguepay#failed";
+        },
+      });
+    }
+function payWithmonnify() {
+        MonnifySDK.initialize({
+            amount:200,
+            currency: "",
+            reference: '2006222022093058',
+            customerName: "Ikenna Treepz",
+            customerEmail: "onyejiaka.samuel@gmail.com",
+            apiKey: "MK_PROD_GMUYJ2T3SB",
+            contractCode: "886519173888",
+            paymentDescription: "Payment for signals",
+            isTestMode: true,
+            metadata:{
+             "name": "IkennaTreepz"
+            },
+            paymentMethods: ["CARD", "ACCOUNT_TRANSFER"],
+            incomeSplitConfig: [],
+            onComplete: function(response){
+             window.location.href = `?platform=monnify#success`;
+            },
+            onClose: function(data){
+                //Implement what should happen when the modal is closed here
+                console.log(data);
+                 window.location.href = "?platform=monnify#cancelled";
+            }
+        });
+    }
+function returnComma(str){
+  if(str === "") {
+    return str;
+  }
+  if(str === ".") {
+    return String(str).replace('.','');
+  }
+  if(String(str) === "00"){
+    return "0";
+  }
+  str = String(str).replace(/[^0-9.]/g,'');
+  var getDot = String(str).split(".");
+  var firstPart = getDot[0];
+  if(firstPart.length >= 4) {
+     firstPart = firstPart.replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+}
+  if(getDot.length >= 2){
+    return firstPart+"."+getDot[1];
+  }
+  return firstPart;
+}
+function createUniqueID() {
+  var text = "";
+  var tm = new Date().getMilliseconds();
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (var i = 0; i < 15; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text+tm;
+}
+</script>
+</body>

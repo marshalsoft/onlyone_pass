@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../Library/Android/sdk/platforms/android-32/data/res/layout/simple_dropdown_item_1line.xml" value="0.20833333333333334" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/simple_spinner_item.xml" value="0.8667763157894737" />
+        <entry key="mylibrary/src/main/res/layout/activity_webview.xml" value="0.48744049072265627" />
+        <entry key="onlypass_payment/src/main/res/layout/activity_webview.xml" value="0.25" />
+        <entry key="onlypass_payment/src/main/res/xml/network_security_config.xml" value="0.21770833333333334" />
+        <entry key="onlypass_plugin/src/main/res/layout/activity_payment_view.xml" value="0.1716485507246377" />
+        <entry key="onlypass_plugin/src/main/res/layout/payment_view.xml" value="0.3" />
+        <entry key="onlypass_plugin/src/main/res/layout/web_pay.xml" value="0.2408215107361963" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
